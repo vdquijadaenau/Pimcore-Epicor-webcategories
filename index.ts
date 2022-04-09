@@ -1,13 +1,27 @@
-import createFolderPaths from "./createFolders";
-import ParseFile, { FolderStructure } from "./readCsvFiles";
 import * as fs from "fs";
 
-// filename on root dire
-const CSV_FILE_NAME = "webcategoriesCSVfile.csv";
+import createFolderPaths from "./createFolders";
+import ParseFile, { FolderStructure } from "./readCsvFiles";
+
+import chalk from "chalk";
+
+// filenames on root dir
+const CSV_FILE_NAME = "webcategoriespimcore.csv";
 const DATA_FILE_NAME = "dataFolders.json";
+
+const headers = [
+  "company",
+  "partNumber",
+  "webCategory",
+  "subCategory",
+  "family",
+  "orderInFamily",
+];
+
 let folders: FolderStructure<string>[] = [];
+
 //folder structure from file
-ParseFile(CSV_FILE_NAME, DATA_FILE_NAME)
+ParseFile(CSV_FILE_NAME, DATA_FILE_NAME, headers)
   .then(() => {
     // Read & Parse Data
     const data = fs.readFileSync(DATA_FILE_NAME, { encoding: "utf-8" });
@@ -27,11 +41,11 @@ ParseFile(CSV_FILE_NAME, DATA_FILE_NAME)
       dirs.add(folderName);
     });
 
-    console.log(dirs);
+    console.log(chalk.bgBlueBright(dirs));
     dirs.forEach((dir) => {
       createFolderPaths(dir, true);
     });
   })
   .catch((err) => {
-    console.error(err);
+    console.error(chalk.redBright(err));
   });

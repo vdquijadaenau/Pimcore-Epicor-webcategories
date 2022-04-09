@@ -1,7 +1,6 @@
-import { rejects } from "assert";
 import * as fs from "fs";
 import * as path from "path";
-import { resolve } from "path";
+import chalk from "chalk";
 
 export type Folders = {
   folder: { subfolder: Folders[] };
@@ -25,17 +24,15 @@ function createFolderPaths(
 
       fs.mkdir(curDir, { recursive: true }, (err) => {
         if (err) {
-          console.error(err);
+          console.error(chalk.bgRedBright(err));
           rejects(false);
         }
-        console.log("Created dir:" + curDir);
+        console.log(chalk.bgGreenBright("Created dir:" + curDir));
         resolve(true);
       });
       return curDir;
     }, initDir);
   });
-  // let baseDir: string;
-  // console.log("boolean value " + isRelative);
 }
 
 export default createFolderPaths;
